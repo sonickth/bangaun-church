@@ -3,9 +3,9 @@
   --paper-warm:#F3EEE3;
   --ink:#2B2A26;
   --ink-soft:#5C574C;
-  --green:#3F5D50;
-  --green-deep:#2C4137;
-  --ochre:#C1873B;
+  --green:#3E5B85;
+  --green-deep:#2D4463;
+  --ochre:#7E9080;
   --line:#DCD3C2;
 }
 *{box-sizing:border-box;}
@@ -40,6 +40,8 @@ header{
 }
 .logo{font-size:20px; letter-spacing:1px;}
 .logo span{color:var(--green);}
+.logo-img{height:36px; width:auto; display:block;}
+footer .logo-text{color:var(--paper); font-size:20px; letter-spacing:1px; margin-bottom:14px; display:block; font-family:'Noto Serif KR', serif; font-weight:700;}
 nav ul{list-style:none; display:flex; gap:28px; margin:0; padding:0;}
 nav a{font-size:15px; color:var(--ink-soft); transition:color .2s;}
 nav a:hover, nav a.active{color:var(--green);}
@@ -143,6 +145,17 @@ section{padding:64px 0;}
 .notice-item .title{font-size:15px;}
 .notice-item .date{font-size:14px; color:var(--ink-soft); white-space:nowrap;}
 .notice-item .body{padding:0 4px 22px; font-size:14px; color:var(--ink-soft); border-top:1px dashed var(--line); margin-top:2px; padding-top:16px;}
+.post-form{background:var(--paper); border:1px solid var(--line); padding:26px; margin-bottom:28px; display:none;}
+.post-form.open{display:block;}
+.post-form .form-row{display:flex; gap:14px; margin-bottom:14px;}
+.post-form input, .post-form select, .post-form textarea{
+  width:100%; padding:12px 14px; border:1px solid var(--line); background:var(--paper);
+  font-family:inherit; font-size:14px; color:var(--ink); margin-bottom:14px;
+}
+.post-form textarea{resize:vertical;}
+.fb-banner{background:#FFF4E5; border:1px solid #E8C88A; padding:14px 18px; font-size:13px; color:#7A5B1F; margin-bottom:24px;}
+.empty-note{padding:24px 0; color:var(--ink-soft); font-size:14px;}
+@media(max-width:600px){ .post-form .form-row{flex-direction:column; gap:0;} }
 
 /* 신청/문의 폼 */
 .apply-box{margin-top:0; background:var(--paper); border:1px solid var(--line); padding:32px; scroll-margin-top:90px;}

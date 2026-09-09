@@ -3,23 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>반가운교회-수정</title>
+<title>반가운교회</title>
 <!--
   ============================================
   관리자 수정 가이드 — 자세한 내용은 README.md 참고
-  [[ADDRESS]] [[PHONE]] [[EMAIL]] 을 Ctrl+F로 찾아 실제 정보로 교체하세요.
-  이 표시는 모든 페이지(index/about/service/vision/missions/news/contact)에 있습니다.
+  교회 기본정보(주소·전화·이메일·목사님 성함)는 이미 반영되어 있습니다.
+  남은 설정: service.html의 [[YOUTUBE_ID]], news.html/assets/firebase-config.js의 Firebase 설정
+  이 안내는 모든 페이지(index/about/service/vision/missions/news/contact)에 있습니다.
   ============================================
 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;700&family=Pretendard:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/style.css">
+<link rel="icon" type="image/png" href="assets/logo.png">
 </head>
 <body>
 
 <header>
   <div class="nav-inner">
-    <a href="index.html" class="logo">반가운<span>교회</span></a>
+    <a href="index.html" class="logo"><img src="assets/logo.png" alt="반가운교회 Bangawoon Church" class="logo-img"></a>
     <nav><ul id="navList">
       <li><a href="about.html">교회소개</a></li>
       <li><a href="service.html">예배안내</a></li>
@@ -50,11 +52,11 @@
         <ellipse cx="180" cy="292" rx="150" ry="14" fill="#DCD3C2"/>
         <path d="M120 292 V150 H240 V292" fill="none" stroke="#2B2A26" stroke-width="4"/>
         <path d="M112 152 L180 96 L248 152" fill="none" stroke="#2B2A26" stroke-width="4" stroke-linejoin="round"/>
-        <rect x="165" y="200" width="30" height="92" fill="#3F5D50"/>
+        <rect x="165" y="200" width="30" height="92" fill="#3E5B85"/>
         <circle cx="188" cy="246" r="3" fill="#FAF7F1"/>
-        <path d="M180 96 C170 60 175 30 180 18 C185 30 190 60 180 96 Z" fill="#C1873B" opacity="0.85"/>
-        <circle cx="180" cy="34" r="22" fill="#C1873B" opacity="0.18"/>
-        <circle cx="180" cy="34" r="12" fill="#C1873B" opacity="0.4"/>
+        <path d="M180 96 C170 60 175 30 180 18 C185 30 190 60 180 96 Z" fill="#7E9080" opacity="0.9"/>
+        <circle cx="180" cy="34" r="22" fill="#7E9080" opacity="0.18"/>
+        <circle cx="180" cy="34" r="12" fill="#7E9080" opacity="0.4"/>
       </svg>
     </div>
   </div>
@@ -132,8 +134,8 @@
   <div class="wrap">
     <div class="footer-grid">
       <div>
-        <span class="logo serif">반가운교회</span>
-        <p>[[ADDRESS]]<br>대표전화 [[PHONE]]<br>이메일 [[EMAIL]]</p>
+        <span class="logo-text">반가운교회</span>
+        <p>서울특별시 성북구 성북로4길 52 3층 (한진스포츠센터 근린관)<br>대표전화 010-0000-0000<br>이메일 sonickth@naver.com</p>
       </div>
       <div>
         <h3>예배시간</h3>
@@ -159,19 +161,44 @@
   </div>
 </footer>
 
+<!-- Firebase (나눔터 최신글 3개 불러오기). 설정 전에는 예시 글이 표시됩니다. -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="assets/firebase-config.js"></script>
+
 <script src="assets/site.js"></script>
 <script>
-  const NOTICES = [
+  const SAMPLE_HOME_POSTS = [
     { tag: "공지", title: "가을 심방 일정 안내", date: "2026.09.02" },
-    { tag: "선교지소식", title: "치앙마이 000 선교사 사역 편지", date: "2026.08.24" },
+    { tag: "선교지소식", title: "치앙마이 허○○ 선교사 사역 편지", date: "2026.08.24" },
     { tag: "행사", title: "추수감사절 예배 및 나눔 행사", date: "2026.08.20" },
   ];
-  document.getElementById('homeNoticeList').innerHTML = NOTICES.slice(0,3).map(n => `
-    <details class="notice-item"><summary>
-      <div><span class="tag">${n.tag}</span><span class="title">${n.title}</span></div>
-      <span class="date">${n.date}</span>
-    </summary></details>
-  `).join('');
+
+  function escHome(s){
+    return (s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+  function renderHomeNotices(items){
+    document.getElementById('homeNoticeList').innerHTML = items.map(n => `
+      <details class="notice-item"><summary>
+        <div><span class="tag">${escHome(n.tag)}</span><span class="title">${escHome(n.title)}</span></div>
+        <span class="date">${escHome(n.date)}</span>
+      </summary></details>
+    `).join('');
+  }
+
+  if (typeof FIREBASE_READY !== 'undefined' && FIREBASE_READY) {
+    db.collection('posts').orderBy('createdAt', 'desc').limit(3).get().then(snap => {
+      const items = snap.docs.map(doc => {
+        const d = doc.data();
+        const date = d.createdAt ? d.createdAt.toDate() : new Date();
+        return { tag: d.tag, title: d.title,
+          date: `${date.getFullYear()}.${String(date.getMonth()+1).padStart(2,'0')}.${String(date.getDate()).padStart(2,'0')}` };
+      });
+      renderHomeNotices(items.length ? items : SAMPLE_HOME_POSTS);
+    }).catch(() => renderHomeNotices(SAMPLE_HOME_POSTS));
+  } else {
+    renderHomeNotices(SAMPLE_HOME_POSTS);
+  }
 </script>
 
 </body>
