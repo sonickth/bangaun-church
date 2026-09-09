@@ -7,12 +7,12 @@
   ============================================
 */
 const firebaseConfig = {
-  apiKey: "[[FIREBASE_API_KEY]]",
-  authDomain: "[[FIREBASE_AUTH_DOMAIN]]",
-  projectId: "[[FIREBASE_PROJECT_ID]]",
-  storageBucket: "[[FIREBASE_STORAGE_BUCKET]]",
-  messagingSenderId: "[[FIREBASE_SENDER_ID]]",
-  appId: "[[FIREBASE_APP_ID]]",
+  apiKey: "AIzaSyAnN-CLf6Jb1aVAsAR21QbPPNGLh3NNri4",
+  authDomain: "bangaun-church.firebaseapp.com",
+  projectId: "bangaun-church",
+  storageBucket: "bangaun-church.firebasestorage.app",
+  messagingSenderId: "386976591857",
+  appId: "1:386976591857:web:60ebcde634561e40489e50",
 };
 
 const FIREBASE_READY = !firebaseConfig.apiKey.startsWith("[[");
